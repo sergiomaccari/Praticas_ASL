@@ -1,5 +1,5 @@
 %% pratica1.m — Pratica 1: Convolucao e Correlacao (ASL - UTFPR 2026)
-clear; clc; close all;
+clear; clc; close all; %% limpa tudo
 
 %% =========================================================
 %% TAREFA 1 — Convolucao
@@ -24,6 +24,7 @@ fprintf('Esperado = 0.2000 1.0000 2.0000 2.4000 1.2000 0.2000\n\n');
 %% =========================================================
 fprintf('=== TAREFA 2: Analise e Filtragem ===\n\n');
 
+%frquencia amostragem, num amostragens e vetor indice discreto
 fs = 1000; N = 1000; n = 1:N;
 x(n) = cos(2*pi*(n-1)/100) + cos(2*pi*(n-1)/4);
 
@@ -43,6 +44,7 @@ subplot(3,2,2);
 plot(f_axis, X);
 title('abs da fft do sinal x'); grid on;
 
+%verifica se os filtros arquivos existem
 % 2.c — Filtragem (requer fpb.txt e fpa.txt no diretorio corrente)
 
 fpb = load('filtrosPratica1/fpb.txt');
@@ -89,6 +91,8 @@ title('ganho do fltro fpa (ganho 1 em 0Hz)'); xlabel('n'); ylabel('Amplitude'); 
 %% TAREFA 3 — Correlacao e Simulacao de Radar
 %% =========================================================
 fprintf('=== TAREFA 3: Correlacao ===\n\n');
+
+%aqui o amigao passou já os comentarios e eu to no trabalho nao vou recomentar
 
 % 3.a — Verificacao da funcao correlacao
 r1 = correlacao([1,2,3],[1,2]);
