@@ -1,5 +1,5 @@
 %% pratica1.m — Pratica 1: Convolucao e Correlacao (ASL - UTFPR 2026)
-clear; clc; close all;
+clear; clc; close all; %% limpa tudo
 
 % Adiciona caminho das funcoes auxiliares da Pratica 0
 addpath('../Pratica 0/ArquivosM');
@@ -9,17 +9,21 @@ addpath('../Pratica 0/ArquivosM');
 %% =========================================================
 fprintf('=== TAREFA 1: Convolucao ===\n');
 
+%define sinais a e b
 a = [0.2, 0.6, 0.2];
 b = [1, 2, 3, 1];
 
-c_nossa   = convolucao(a, b);
-c_builtin = conv(a, b);
+% calculos de convolucao com a nossa funcao e com a padrao matlab
+c_nossa   = convolucao(a, b); 
+c_builtin = conv(a, b); 
 
+% resultados e comparacao no ultimo print
 fprintf('convolucao(a,b) = '); fprintf('%.4f ', c_nossa);   fprintf('\n');
 fprintf('conv(a,b)       = '); fprintf('%.4f ', c_builtin); fprintf('\n');
 fprintf('Esperado        = 0.2000 1.0000 2.0000 2.4000 1.2000 0.2000\n');
 fprintf('Erro maximo: %.2e\n\n', max(abs(c_nossa - c_builtin)));
 
+%plot sinais e resultados 
 figure(1);
 subplot(3,1,1); stem(a,'filled'); title('Sinal a'); xlabel('n'); ylabel('Amplitude'); grid on;
 subplot(3,1,2); stem(b,'filled'); title('Sinal b'); xlabel('n'); ylabel('Amplitude'); grid on;
@@ -33,19 +37,24 @@ xlabel('n'); ylabel('Amplitude'); grid on; legend('convolucao()','conv()');
 %% =========================================================
 fprintf('=== TAREFA 2: Analise e Filtragem ===\n');
 
+%frquencia amostragem, num amostragens e vetor indice discreto
 fs = 1000; N = 1000; n = 1:N;
+
+% cria sinal x composto por soma de cos 
 x = cos(2*pi*(n-1)/100) + cos(2*pi*(n-1)/4);
-% Componentes de frequencia:
+%essas duas linhas é exemplos n mas foi o amigao que colocou
 %   cos(2*pi*(n-1)/100) -> periodo = 100 amostras -> f = fs/100 = 10 Hz
 %   cos(2*pi*(n-1)/4)   -> periodo = 4 amostras   -> f = fs/4  = 250 Hz
 fprintf('Componentes de frequencia: 10 Hz e 250 Hz\n');
 
+
 figure(2);
 subplot(2,1,1);
-stem(n(1:100), x(1:100),'filled');
+stem(n(1:100), x(1:100),'filled'); %isso aqui mostra as primerias 100 amostras
 title('x(n) — primeiras 100 amostras (tempo discreto)');
 xlabel('n (amostras)'); ylabel('Amplitude'); grid on;
 
+%calc magnitude, cria eixo frequencias em hz, plot da parte positiva do espectro
 subplot(2,1,2);
 X = abs(fft(x));
 f_axis = (0:N-1)*(fs/N);
@@ -53,6 +62,7 @@ plot(f_axis(1:N/2), X(1:N/2));
 title('Espectro |FFT(x)|'); xlabel('Frequencia (Hz)'); ylabel('|X(f)|'); grid on;
 fprintf('Picos esperados no espectro: 10 Hz e 250 Hz\n\n');
 
+%verifica se os filtros arquivos existem
 % 2.c — Filtragem (requer fpb.txt e fpa.txt no diretorio corrente)
 if exist('fpb.txt','file') && exist('fpa.txt','file')
     fpb = load('fpb.txt');
@@ -61,6 +71,7 @@ if exist('fpb.txt','file') && exist('fpa.txt','file')
     y_pb = convolucao(fpb, x);
     y_pa = convolucao(fpa, x);
 
+%plot filtro passa baixo
     figure(3);
     subplot(2,2,1); stem(fpb,'filled'); title('Resposta ao impulso — FPB'); xlabel('n'); grid on;
     subplot(2,2,2); plot(f_axis(1:N/2), abs(fft(fpb,N))(1:N/2));
@@ -70,6 +81,7 @@ if exist('fpb.txt','file') && exist('fpa.txt','file')
     subplot(2,2,4); plot(f_axis(1:N/2), abs(fft(y_pb,N))(1:N/2));
                     title('Espectro do sinal filtrado (FPB)'); xlabel('Hz'); grid on;
 
+%plot filtro passa alto
     figure(4);
     subplot(2,2,1); stem(fpa,'filled'); title('Resposta ao impulso — FPA'); xlabel('n'); grid on;
     subplot(2,2,2); plot(f_axis(1:N/2), abs(fft(fpa,N))(1:N/2));
@@ -91,6 +103,8 @@ end
 %% TAREFA 3 — Correlacao e Simulacao de Radar
 %% =========================================================
 fprintf('=== TAREFA 3: Correlacao ===\n');
+
+%aqui o amigao passou já os comentarios e eu to no trabalho nao vou recomentar
 
 % 3.a — Verificacao da funcao correlacao
 r1 = correlacao([1,2,3],[1,2]);
