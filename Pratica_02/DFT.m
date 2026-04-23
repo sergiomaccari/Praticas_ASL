@@ -1,18 +1,12 @@
 function [Y] = DFT(XX)
-
-    N = length(XX);
-    
-    for K = 0:(N-1)
-        REX = 0;
-        IMX = 0;
-
-        for I = 0:(N-1)
-            REX = REX + XX(I+1) * cos(2 * pi * K * I / N);
-            IMX = IMX - XX(I+1) * sin(2 * pi * K * I / N);
+    NX = length(XX);
+    REX(floor(NX/2) + 1) = 0;
+    IMX(floor(NX/2) + 1) = 0;
+    for K = 1:(floor(NX/2) + 1)
+        for I = 1:NX
+            REX(K) = REX(K) + XX(I) * cos(2 * pi * (K-1) * (I-1) / NX);
+            IMX(K) = IMX(K) - XX(I) * sin(2 * pi * (K-1) * (I-1) / NX);
         end
-
-        Y(K+1) = REX + sqrt(-1) * IMX;
-
+        Y = REX + sqrt(-1) * IMX;
     end
-
 end

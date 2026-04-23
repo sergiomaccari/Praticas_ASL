@@ -45,26 +45,28 @@ N1 = 150;
 n1 = 1:N1;
 x1 = cos(pi*(n1-1)/50) + cos(pi*(n1-1)/5.5) + sin(pi*(n1-1)/5);
 
-figure('Name', '2 - Aumentar a resolução em frequência');
+figure('Name', '2.1 - Aumentar a resolução em frequência');
 
 % Plot x1 no tempo (150 pontos)
 subplot(2,2,1);
-plot(x1); title('Sinal x com 150 Pontos');
+plot(x1); title('Sinal com 150 Pontos');
 
 % Plot x1 na frequência (150 pontos)
 subplot(2,2,2);
-plot(abs(DFT(x1)), '.-'); title('DFT do Sinal x com 150 Pontos');
+plot(abs(DFT(x1)), '.-'); title('DFT do Sinal com 150 Pontos');
 
 % Preenchendo com zeros até 1000 pontos
 x1_pz = [x1, zeros(1, N - N1)];
 
+figure('Name', '2.2 - Com Preenchimento com Zeros');
+
 % Plot x1 preenchido no tempo
 subplot(2,2,3);
-plot(x1_pz); title('Sinal x com 150 Pontos com Preenchimento com Zeros');
+plot(x1_pz); title('x1 (Preenchimento com zeros 1000 pt) no Tempo');
 
 % Plot x1 preenchido na frequência
 subplot(2,2,4);
-plot(abs(DFT(x1_pz)), '.-'); title('DFT do Sinal x com Preenchimento com zeros');
+plot(abs(DFT(x1_pz)), '.-'); title('DFT x1 (Preenchimento com zeros)');
 
 %% =========================================================
 %% Questao 3 — Resposta em Frequência
