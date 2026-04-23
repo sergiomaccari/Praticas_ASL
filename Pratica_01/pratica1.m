@@ -11,11 +11,11 @@ fprintf('=== TAREFA 1: Convolucao ===\n\n');
 a = [0.2, 0.6, 0.2];
 b = [1, 2, 3, 1];
 
-c_nossa   = convolucao(a, b); 
+c_nossa = convolucao(a, b); 
 c_matlab = conv(a, b); 
 
 fprintf('convolucao(a,b) = '); fprintf('%.4f ', c_nossa);  fprintf('\n');
-fprintf('conv(a,b) = ');       fprintf('%.4f ', c_matlab); fprintf('\n');
+fprintf('conv(a,b) = '); fprintf('%.4f ', c_matlab); fprintf('\n');
 fprintf('Esperado = 0.2000 1.0000 2.0000 2.4000 1.2000 0.2000\n\n');
 
 %% =========================================================
@@ -101,7 +101,7 @@ fprintf('Esperado: 2 5 8 3\n\n');
 x1 = senoide(2.6,-2.6,0.25,15); %cria 1/4 de ciclo de uma senoide (sinal emitido pelo radar)
 
 figure(3);
-subplot(3,1,1); 
+subplot(2,1,1); 
 plot(x1);
 axis([0 1000 -1 3]);
 grid;
@@ -113,7 +113,7 @@ for i=800:814
     x3(i)=x3(i)+x1(i-799);
 end
 
-subplot(3,1,2);
+subplot(2,1,2);
 plot(x2,'b');
 hold on;
 plot(x3,'r'); %sinal recebido pelo radar
@@ -124,7 +124,7 @@ hold off;
 % 3.c) — Correlacao cruzada para deteccao
 
 c = correlacao(x1,x3);
-subplot(3,1,3);
+figure(4);
 plot(c);
 xlim([0 1000]);
 grid; 
