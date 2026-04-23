@@ -1,5 +1,5 @@
 %% pratica1.m — Pratica 1: Convolucao e Correlacao (ASL - UTFPR 2026)
-clear; clc; close all; %% limpa tudo
+clear; clc; close all;
 
 %% =========================================================
 %% Questao 1 — Convolucao
