@@ -1,0 +1,29 @@
+function [y] = IDFT(x)
+nx=length(x);
+rex=real(x)/(nx);
+imx=-imag(x)/(nx);
+rex(1)=rex(1)/2;
+rex(nx)=rex(nx)/2;
+ny=2*nx;
+yr(ny)=0;
+yi(ny)=0;
+for k=1:nx
+    for i=1:ny
+        yr(i)=yr(i)+ rex(k)*cos(2*pi*(k-1)*(i-1)/ny);
+        yi(i)=yi(i)+ imx(k)*sin(2*pi*(k-1)*(i-1)/ny);
+    end
+end
+y=yr+yi;
+end
+
+function [y] = DFTe(x) % by cesar  janeczko em 1sem2025
+nx=length(x);
+y(floor(nx/2)+1)=0;
+i=sqrt(-1);
+for k=1:(nx/2)+1% frequencia k
+    for j=1:nx
+        y(k)=y(k)+ x(j)*exp(-i*2*pi*(k-1)*(j-1)/nx);
+        % a exponencial contem seno e cosseno Euller
+    end
+end
+end
