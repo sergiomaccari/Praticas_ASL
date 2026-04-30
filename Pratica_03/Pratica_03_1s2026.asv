@@ -58,7 +58,7 @@ for fs = fs_lista
     s10amostrado2 = senoide(100, -100, 10, fs);  % senoide.m usa fa-1 em amostras
     % O exemplo do enunciado usa indice = 1:Norig/Na:Norig
     indice        = 1:Norig/Na:Norig;
-    indice        = indice(1:length(s10amostrado2));
+    % indice        = indice(1:length(s10amostrado2));
 
     % Tempo
     figure('Name', sprintf('Q2 seno 10Hz fs=%g', fs));
