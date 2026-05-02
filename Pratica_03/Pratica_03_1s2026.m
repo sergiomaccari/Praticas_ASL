@@ -176,9 +176,7 @@ ynew = IDFT(dftx2);
 subplot(3,2,6); plot(ynew, '.-');
 title('sinal reconstituido (com correcao da amplitude)'); grid on;
 
-energ_ynew = sum(ynew.*ynew);
-fprintf('energ_ynew = %.4f\n', energ_ynew); % 200
-salvar('q4_sem_aliasing');
+
 
 % --- Sinal COM aliasing (95 Hz amostrado a 100 Hz)
 clear x xo;
@@ -210,8 +208,15 @@ title('DFT com zeros (corte em k=10)'); grid on;
 subplot(3,2,4); plot(y, '.-');
 title('reconstruido (inversao de fase, amplitude)'); grid on;
 
-subplot(3,2,6); plot(abs(DFT(y)), 'o-'); xlim([0 kmax_q4]);
-title('DFT do sinal reconstituido'); grid on;
-salvar('q4_com_aliasing');
+
 
 disp('Pratica 3 concluida. Figuras em ./imgs/.');
+
+
+energ_ynew = sum(ynew.*ynew);
+fprintf('energ_ynew = %.4f\n', energ_ynew); % 200
+salvar('q4_sem_aliasing');
+
+subplot(3,2,6); plot(abs(DFT(y)), 'o-'); xlim([0 kmax_q4]);
+title('DFT do sinal reconstituido'); grid on;
+salvar('q4_com_aliasing');olei t
