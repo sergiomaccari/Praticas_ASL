@@ -47,9 +47,13 @@ salvar('q1d_round_5bits');
 %% =========================================================
 %% Q2 - Senoide 10Hz amostrada com varias taxas
 %% =========================================================
-fs_lista = [5, 15, 20, 20.01, 25, 40];
+fs_lista     = [5, 15, 20, 20.01, 25, 40];
+% Limite superior do eixo k para a |FFT| de cada fs (ate metade do espectro)
+fft_kmax_q2  = [3, 6, 11, 11, 11, 11];
 
-for fs = fs_lista
+for idx = 1:length(fs_lista)
+    fs   = fs_lista(idx);
+    kmax = fft_kmax_q2(idx);
     Norig         = 200;                         % "continuo"
     s10original   = senoide(100, -100, 10, Norig);
 
@@ -70,9 +74,10 @@ for fs = fs_lista
 
     % FFT
     figure('Name', sprintf('Q2 seno FFT fs=%g', fs));
-    plot(abs(fft(s10amostrado2)), 'LineWidth', 1.2);
+    plot(abs(fft(s10amostrado2)), 'o-', 'LineWidth', 1.2);
     title(sprintf('|FFT| do sinal amostrado com fs = %g Hz', fs));
     xlabel('Indice k'); grid on;
+    xlim([0 kmax]);
     salvar(sprintf('q2_seno_%s_fft', strrep(num2str(fs), '.', 'p')));
 end
 
@@ -90,7 +95,12 @@ salvar('q2_batimento_2001');
 %% =========================================================
 %% Q3 - Cossenoide 10Hz amostrada com varias taxas
 %% =========================================================
-for fs = fs_lista
+% Limite superior do eixo k para a |FFT| da cossenoide
+fft_kmax_q3 = [2, 6, 11, 11, 11, 11];
+
+for idx = 1:length(fs_lista)
+    fs   = fs_lista(idx);
+    kmax = fft_kmax_q3(idx);
     Norig         = 200;
     c10original   = cossenoide(100, -100, 10, Norig);
 
@@ -107,9 +117,10 @@ for fs = fs_lista
     salvar(sprintf('q3_cos_%s_tempo', strrep(num2str(fs), '.', 'p')));
 
     figure('Name', sprintf('Q3 cos FFT fs=%g', fs));
-    plot(abs(fft(c10amostrado2)), 'LineWidth', 1.2);
+    plot(abs(fft(c10amostrado2)), 'o-', 'LineWidth', 1.2);
     title(sprintf('|FFT| da cossenoide amostrada com fs = %g Hz', fs));
     xlabel('Indice k'); grid on;
+    xlim([0 kmax]);
     salvar(sprintf('q3_cos_%s_fft', strrep(num2str(fs), '.', 'p')));
 end
 
@@ -134,13 +145,16 @@ end
 energ_x = sum(x.*x);
 fprintf('energ_x  = %.4f\n', energ_x);   % 50
 
+% Limite superior do eixo k das FFTs em Q4 (corte logo apos o pico em k=6)
+kmax_q4 = 6;
+
 figure('Name', 'Q4 sem aliasing'); set(gcf, 'Position', [100 100 900 700]);
 
 subplot(3,2,1); plot(x, '.-');
 title('sinal original sem aliasing'); grid on;
 
 dftx = DFT(x);
-subplot(3,2,2); plot(abs(dftx)); axis([0 50 -2 60]);
+subplot(3,2,2); plot(abs(dftx), 'o-'); axis([0 kmax_q4 -2 60]);
 title('abs da DFT do sinal original'); grid on;
 
 dftx(51:200) = complex(0,0);
@@ -148,14 +162,14 @@ y = IDFT(dftx);
 energ_y = sum(y.*y);
 fprintf('energ_y  = %.4f\n', energ_y);   % 12.5
 
-subplot(3,2,3); plot(abs(dftx)); axis([0 200 -2 60]);
-title('DFT com zeros'); grid on;
+subplot(3,2,3); plot(abs(dftx), 'o-'); axis([0 kmax_q4 -2 60]);
+title('DFT com zeros (corte em k=10)'); grid on;
 
 subplot(3,2,4); plot(y, '.-');
 title('sinal reconstituido (mudanca na amplitude)'); grid on;
 
 dftx2 = 4*dftx;
-subplot(3,2,5); plot(abs(dftx2));
+subplot(3,2,5); plot(abs(dftx2), 'o-'); axis([0 kmax_q4 -8 240]);
 title('DFT preenchida com zeros e x4'); grid on;
 
 ynew = IDFT(dftx2);
@@ -184,19 +198,19 @@ plot(indice1, x, '.-b');
 title('original 95Hz (vermelho) e aliasing 5Hz (azul)'); grid on; hold off;
 
 dftx = DFT(x);
-subplot(3,2,2); plot(abs(dftx)); axis([0 50 -2 60]);
+subplot(3,2,2); plot(abs(dftx), 'o-'); axis([0 kmax_q4 -2 60]);
 title('abs da DFT do sinal amostrado'); grid on;
 
 dftx(51:200) = 0 + 0i;
 y = IDFT(dftx);
 
-subplot(3,2,3); plot(abs(dftx)); axis([0 200 -2 60]);
-title('DFT com zeros'); grid on;
+subplot(3,2,3); plot(abs(dftx), 'o-'); axis([0 kmax_q4 -2 60]);
+title('DFT com zeros (corte em k=10)'); grid on;
 
 subplot(3,2,4); plot(y, '.-');
 title('reconstruido (inversao de fase, amplitude)'); grid on;
 
-subplot(3,2,6); plot(abs(DFT(y)));
+subplot(3,2,6); plot(abs(DFT(y)), 'o-'); xlim([0 kmax_q4]);
 title('DFT do sinal reconstituido'); grid on;
 salvar('q4_com_aliasing');
 
