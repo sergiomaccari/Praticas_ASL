@@ -62,24 +62,12 @@
 {Curitiba, Junho de 2026\par}
 \end{titlepage}
 
-% ============================ INTRODUCAO ============================
-\section*{Introdu\c{c}\~ao}
-Esta pr\'atica trata dos filtros IIR (filtros recursivos), nos quais a sa\'ida
-depende tanto das amostras de entrada quanto de amostras anteriores da pr\'opria
-sa\'ida. S\~ao implementadas quatro fam\'ilias de filtros: o passa-baixas e o
-passa-altas de p\'olo simples (an\'alogos a um circuito R-C) e os filtros
-recursivos de banda estreita (passa-banda e rejeita-banda). Em seguida, esses
-conceitos s\~ao aplicados a um problema real de processamento de som: a
-recupera\c{c}\~ao de um sinal de voz cujo espectro foi invertido por modula\c{c}\~ao
-e contaminado por ru\'ido. Todas as rotinas foram implementadas em MATLAB e os
-gr\'aficos reproduzem as telas obtidas em laborat\'orio.
-
 % ============================ ITEM 1 ============================
 \section{Filtros de p\'olo simples (R-C): passa-baixas e passa-altas}
-\textbf{1) Implemente rotina MATLAB para calcular coeficientes de filtros de
-P\'olo simples (R-C) passa-baixas e passa-altas. Voc\^e escolhe fc. Encontre os
-gr\'aficos da resposta ao impulso (1 0 0 0 ... 100 pontos) e das respostas em
-frequ\^encia (ganho, atenua\c{c}\~ao e fase).}
+\textbf{Enunciado:} ``Implemente rotina MATLAB para calcular coeficientes de
+filtros de P\'olo simples (R-C) passa-baixas e passa-altas. Voc\^e escolhe fc.
+Encontre os gr\'aficos da resposta ao impulso (1 0 0 0 0 0  0....(100 pontos)) e
+das respostas em frequ\^encia (ganho, atenua\c{c}\~ao e fase).''
 
 \vspace{0.3cm}
 O filtro passa-baixas de p\'olo simples \'e o equivalente discreto de um circuito
@@ -94,9 +82,21 @@ unit\'ario em corrente cont\'inua. Escolheu-se $f_c = 0{,}10$.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{figs/f1_fpb.png}
-\caption{FPB de p\'olo simples ($f_c=0{,}10$): resposta ao impulso, ganho,
-atenua\c{c}\~ao (dB) e fase, calculados sobre 100 pontos.}
+\includegraphics[width=0.8\linewidth]{figs/f1_fpb_tempo.png}
+\caption{Resposta ao impulso do FPB de p\'olo simples no tempo ($f_c=0{,}10$),
+calculada sobre 100 pontos.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f1_fpb_ganho.png}
+\caption{Curva de ganho (linear) do FPB de p\'olo simples ($f_c=0{,}10$).}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f1_fpb_fase.png}
+\caption{Curva de fase (em graus) do FPB de p\'olo simples ($f_c=0{,}10$).}
 \end{figure}
 
 A resposta ao impulso decai exponencialmente, como esperado de um sistema de
@@ -114,9 +114,20 @@ cont\'inua \'e cancelada e as altas frequ\^encias s\~ao preservadas.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{figs/f1_fpa.png}
-\caption{FPA de p\'olo simples ($f_c=0{,}10$): resposta ao impulso, ganho,
-atenua\c{c}\~ao (dB) e fase.}
+\includegraphics[width=0.8\linewidth]{figs/f1_fpa_tempo.png}
+\caption{Resposta ao impulso do FPA de p\'olo simples no tempo ($f_c=0{,}10$).}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f1_fpa_ganho.png}
+\caption{Curva de ganho (linear) do FPA de p\'olo simples ($f_c=0{,}10$).}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f1_fpa_fase.png}
+\caption{Curva de fase (em graus) do FPA de p\'olo simples ($f_c=0{,}10$).}
 \end{figure}
 
 No FPA o ganho \'e praticamente nulo em corrente cont\'inua e cresce em dire\c{c}\~ao
@@ -125,9 +136,9 @@ ordem, a transi\c{c}\~ao tamb\'em \'e suave.
 
 % ============================ ITEM 2 ============================
 \section{Teste dos filtros FPB e FPA}
-\textbf{2) Elabore um sinal com baixa frequ\^encia + alta frequ\^encia e teste os
-filtros FPB e FPA calculados com as rotinas anteriores do item 1). Mostre o sinal
-gerado e os sinais filtrados (no tempo e na frequ\^encia).}
+\textbf{Enunciado:} ``Elabore um sinal com baixa frequ\^encia + alta frequ\^encia
+e teste os filtros FPB e FPA calculados com as rotinas anteriores do item 1).
+Mostre o sinal gerado e os sinais filtrados (no tempo e na frequ\^encia).''
 
 \vspace{0.3cm}
 Gerou-se um sinal com 1000 amostras ($F_s = 1000$~Hz) somando uma componente de
@@ -136,10 +147,42 @@ $x[n] = \operatorname{sen}(2\pi\,30\,n/1000) + \operatorname{sen}(2\pi\,350\,n/1
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\linewidth]{figs/f2_teste.png}
-\caption{Sinal de 30~Hz + 350~Hz e seus resultados ap\'os o FPB e o FPA, no tempo
-e na frequ\^encia. Os picos em torno dos \'indices 650 e 970 s\~ao o espelhamento
-da FFT em torno de $F_s/2$.}
+\includegraphics[width=0.8\linewidth]{figs/f2_sinal_tempo.png}
+\caption{Sinal gerado (30~Hz + 350~Hz) no tempo.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f2_sinal_freq.png}
+\caption{Sinal gerado (30~Hz + 350~Hz) na frequ\^encia. As raias aparecem em 30 e
+350~Hz, com os espelhos em torno dos \'indices 650 e 970 (espelhamento da FFT em
+torno de $F_s/2$).}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f2_fpb_tempo.png}
+\caption{Sinal filtrado com o FPB no tempo.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f2_fpb_freq.png}
+\caption{Sinal filtrado com o FPB na frequ\^encia: a raia de 30~Hz \'e preservada
+e a de 350~Hz \'e atenuada.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f2_fpa_tempo.png}
+\caption{Sinal filtrado com o FPA no tempo.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f2_fpa_freq.png}
+\caption{Sinal filtrado com o FPA na frequ\^encia: a raia de 350~Hz \'e preservada
+e a de 30~Hz \'e atenuada.}
 \end{figure}
 
 No espectro do sinal gerado aparecem as raias em 30 e 350~Hz (e seus espelhos).
@@ -150,10 +193,11 @@ o que \'e coerente com as curvas de ganho do item~1.
 
 % ============================ ITEM 3 ============================
 \section{Filtros de banda estreita: passa-banda e rejeita-banda}
-\textbf{3) Implemente rotina MATLAB para calcular coeficientes de filtros Banda
-estreita (passa-banda e corta-banda). Voc\^e escolhe fc e BW. OBS: BW deve ser
-estreito! Encontre os gr\'aficos da resposta ao impulso e das respostas em
-frequ\^encia (ganho, atenua\c{c}\~ao e fase).}
+\textbf{Enunciado:} ``Implemente rotina MATLAB para calcular coeficientes de
+filtros Banda estreita (passa-banda e corta-banda). Voc\^e escolhe fc e BW.
+OBS: BW dever ser estreito! Encontre os gr\'aficos da resposta ao impulso
+(1 0 0 0 0 0  0....(100 pontos)) e das respostas em frequ\^encia (ganho,
+atenua\c{c}\~ao e fase).''
 
 \vspace{0.3cm}
 Os filtros de banda estreita s\~ao sistemas recursivos de segunda ordem
@@ -170,18 +214,42 @@ estreita).
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{figs/f3_bp.png}
-\caption{Passa-banda ($f_c=0{,}25$, $BW=0{,}008$): resposta ao impulso (senoide
-amortecida), ganho, atenua\c{c}\~ao (dB) e fase.}
+\includegraphics[width=0.8\linewidth]{figs/f3_bp_tempo.png}
+\caption{Resposta ao impulso do passa-banda no tempo (senoide amortecida)
+($f_c=0{,}25$, $BW=0{,}008$).}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f3_bp_ganho.png}
+\caption{Curva de ganho (linear) do passa-banda ($f_c=0{,}25$, $BW=0{,}008$).}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f3_bp_fase.png}
+\caption{Curva de fase (em graus) do passa-banda ($f_c=0{,}25$, $BW=0{,}008$).}
 \end{figure}
 
 \lstinputlisting[caption={Filtro recursivo rejeita-banda (notch) de banda estreita.}]{codigo_matlab/FiltroRejeitaBanda.m}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{figs/f3_br.png}
-\caption{Rejeita-banda ($f_c=0{,}25$, $BW=0{,}008$): resposta ao impulso, ganho,
-atenua\c{c}\~ao (dB) e fase.}
+\includegraphics[width=0.8\linewidth]{figs/f3_br_tempo.png}
+\caption{Resposta ao impulso do rejeita-banda no tempo ($f_c=0{,}25$,
+$BW=0{,}008$).}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f3_br_ganho.png}
+\caption{Curva de ganho (linear) do rejeita-banda ($f_c=0{,}25$, $BW=0{,}008$).}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f3_br_fase.png}
+\caption{Curva de fase (em graus) do rejeita-banda ($f_c=0{,}25$, $BW=0{,}008$).}
 \end{figure}
 
 A resposta ao impulso do passa-banda \'e uma senoide amortecida, cuja taxa de
@@ -192,10 +260,11 @@ mantendo ganho unit\'ario no restante do espectro.
 
 % ============================ ITEM 4 ============================
 \section{Teste dos filtros de banda estreita}
-\textbf{4) Elabore um sinal com v\'arias frequ\^encias a sua escolha,
-compat\'ivel com as frequ\^encias de corte dos filtros do item 3). Teste os
-filtros passa-banda e rejeita-banda, banda estreita. Mostre o sinal gerado e os
-sinais filtrados (no tempo e na frequ\^encia).}
+\textbf{Enunciado:} ``Elabore um sinal com v\'arias frequ\^encias a sua escola,
+sinal este que seja compat\'ivel com as frequ\^encias de corte dos filtros
+implementados no item 3). Teste os filtros passa-banda e corta-banda, banda
+estreita, calculados com a rotina anterior, item 3). Mostre o sinal gerado e os
+sinais filtrados (no tempo e na frequ\^encia).''
 
 \vspace{0.3cm}
 Gerou-se um sinal com cinco senoides ($F_s=1000$~Hz): 40, 120, 250, 380 e
@@ -205,9 +274,41 @@ rejei\c{c}\~ao seletivos.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\linewidth]{figs/f4_teste.png}
-\caption{Sinal com cinco frequ\^encias e seus resultados ap\'os o passa-banda e o
-rejeita-banda centrados em 250~Hz, no tempo e na frequ\^encia.}
+\includegraphics[width=0.8\linewidth]{figs/f4_sinal_tempo.png}
+\caption{Sinal gerado (40, 120, 250, 380 e 470~Hz) no tempo.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f4_sinal_freq.png}
+\caption{Sinal gerado (cinco senoides) na frequ\^encia: raias em 40, 120, 250, 380
+e 470~Hz (e seus espelhos).}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f4_bp_tempo.png}
+\caption{Sinal filtrado com o passa-banda (centrado em 250~Hz) no tempo.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f4_bp_freq.png}
+\caption{Sinal filtrado com o passa-banda na frequ\^encia: isola praticamente
+apenas a componente de 250~Hz.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f4_br_tempo.png}
+\caption{Sinal filtrado com o rejeita-banda (centrado em 250~Hz) no tempo.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f4_br_freq.png}
+\caption{Sinal filtrado com o rejeita-banda na frequ\^encia: elimina a raia de
+250~Hz e preserva as demais quatro componentes.}
 \end{figure}
 
 O passa-banda isola praticamente apenas a componente de 250~Hz (no tempo, o sinal
@@ -217,8 +318,26 @@ confirmando o comportamento esperado.
 
 % ============================ ITEM 5 ============================
 \section{Processamento de Som}
-\textbf{5) Demodule o sinal e filtre os ru\'idos, encontrando um sinal o mais
-parecido poss\'ivel com o original. Qual a frase demodulada e filtrada obtida?}
+\textbf{Enunciado:} ``Processamento de Som (em sala, se poss\'ivel use fone de
+ouvido). A este sinal, adicionamos um ru\'ido `branco' apenas com as altas
+frequ\^encias, que n\~ao influencia as frequ\^encias do sinal do \'audio. E,
+adicionalmente, um ru\'ido com v\'arias frequ\^encias pr\'oximas entre si, em um
+local n\~ao ocupado pelo espectro do \'audio gravado. Ap\'os a inclus\~ao dos
+ru\'idos, reverteu-se o espectro do sinal, como ocorre na opera\c{c}\~ao de
+modula\c{c}\~ao (Equa\c{c}\~ao~1) com o uso de uma portadora $f_0$, com a
+m\'axima frequ\^encia poss\'ivel para o tamanho do vetor gravado.''
+\begin{equation}
+x(t)\cos(2\pi f_0 t) \;\longleftrightarrow\;
+\tfrac{1}{2}\big[X(f-f_0) + X(f+f_0)\big]
+\end{equation}
+\textbf{(continua\c{c}\~ao do enunciado):} ``Agora, de posse dos conhecimentos
+adquiridos na disciplina, demodule o sinal e filtre os ru\'idos. Encontrando um
+sinal o mais parecido poss\'ivel com o sinal original mostrado na Figura~1.
+Dica: utilize um filtro passa baixas WindowSinc e um corta faixa Banda Estreita
+(neste pode ser preciso filtrar mais de uma vez)! Qual a frase demodulada e
+filtrada obtida? Gere um relat\'orio explicando detalhadamente a tomada de
+decis\~ao e os procedimentos usados para demodular o sinal e isola-lo do
+ru\'ido. Colocando todos os c\'odigos MATLAB e resultados obtidos.''
 
 \vspace{0.3cm}
 O arquivo \texttt{SinalRuidoModulado1s2026.mat} cont\'em a vari\'avel
@@ -228,16 +347,18 @@ apenas nas altas frequ\^encias e um ru\'ido de banda estreita (v\'arias
 frequ\^encias pr\'oximas) em uma regi\~ao n\~ao ocupada pela voz. Por fim, todo o
 espectro foi revertido pela opera\c{c}\~ao de modula\c{c}\~ao da Equa\c{c}\~ao~1,
 com portadora $f_0$ igual \`a m\'axima frequ\^encia poss\'ivel (Nyquist).
-\begin{equation}
-x(t)\cos(2\pi f_0 t) \;\longleftrightarrow\;
-\tfrac{1}{2}\big[X(f-f_0) + X(f+f_0)\big]
-\end{equation}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{figs/f5_modulado.png}
-\caption{Sinal recebido (ru\'ido modulado), no tempo e na frequ\^encia. O espectro
-\'e dominado pelo ru\'ido branco que ocupa quase toda a faixa.}
+\includegraphics[width=0.8\linewidth]{figs/f5_modulado_tempo.png}
+\caption{Sinal recebido (ru\'ido modulado) no tempo.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f5_modulado_freq.png}
+\caption{Sinal recebido (ru\'ido modulado) na frequ\^encia. O espectro \'e dominado
+pelo ru\'ido branco que ocupa quase toda a faixa.}
 \end{figure}
 
 \subsection*{Estrat\'egia de recupera\c{c}\~ao}
@@ -256,9 +377,15 @@ sobre o \'audio, para a extremidade superior do espectro.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{figs/f5_demodulado.png}
-\caption{Sinal ap\'os a demodula\c{c}\~ao por $\cos(\pi n)$. O espectro foi
-revertido: o conte\'udo de voz reaparece em baixas frequ\^encias.}
+\includegraphics[width=0.8\linewidth]{figs/f5_demod_tempo.png}
+\caption{Sinal ap\'os a demodula\c{c}\~ao por $\cos(\pi n)$, no tempo.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f5_demod_freq.png}
+\caption{Sinal ap\'os a demodula\c{c}\~ao por $\cos(\pi n)$, na frequ\^encia. O
+espectro foi revertido: o conte\'udo de voz reaparece em baixas frequ\^encias.}
 \end{figure}
 
 \subsection*{Filtragem passa-baixas (WindowSinc)}
@@ -273,9 +400,15 @@ grupo foi compensado no recorte do sinal.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{figs/f5_passabaixas.png}
-\caption{Sinal ap\'os o passa-baixas WindowSinc. O ru\'ido branco de alta
-frequ\^encia foi praticamente eliminado, restando a voz e um tom estreito.}
+\includegraphics[width=0.8\linewidth]{figs/f5_lp_tempo.png}
+\caption{Sinal ap\'os o passa-baixas WindowSinc, no tempo.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{figs/f5_lp_freq.png}
+\caption{Sinal ap\'os o passa-baixas WindowSinc, na frequ\^encia. O ru\'ido branco
+de alta frequ\^encia foi praticamente eliminado, restando a voz e um tom estreito.}
 \end{figure}
 
 \subsection*{Rejei\c{c}\~ao do tom de banda estreita}
@@ -284,29 +417,23 @@ Mesmo ap\'os o passa-baixas, persiste um tom intenso e estreito em torno de
 ``v\'arias frequ\^encias pr\'oximas''. Para suprimi-lo sem danificar a voz,
 usou-se um filtro rejeita-banda de banda muito estreita ($BW = 0{,}0008$)
 centrado nessa frequ\^encia, aplicado \textbf{tr\^es vezes em cascata}. Cada
-passagem soma a sua atenua\c{c}\~ao (em dB), produzindo um entalhe profundo sem a
-necessidade de um filtro de ordem excessivamente elevada.
+passagem aprofunda o entalhe e soma a sua atenua\c{c}\~ao, produzindo uma
+rejei\c{c}\~ao profunda do tom sem a necessidade de um filtro de ordem
+excessivamente elevada.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\linewidth]{figs/f5_notch.png}
-\caption{Espectro em torno de 766~Hz antes e depois do rejeita-banda aplicado
-tr\^es vezes. A raia do tom interferente \'e praticamente eliminada.}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\linewidth]{figs/f5_final.png}
+\includegraphics[width=0.8\linewidth]{figs/f5_final_tempo.png}
 \caption{\'Audio recuperado (ap\'os demodula\c{c}\~ao, passa-baixas e
-rejeita-banda em cascata), no tempo e na frequ\^encia. Os surtos de amplitude
-correspondem \`as s\'ilabas da frase falada.}
+rejeita-banda em cascata) no tempo. Os surtos de amplitude correspondem \`as
+s\'ilabas da frase falada.}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\linewidth]{figs/f5_espectrograma.png}
-\caption{Espectrograma do \'audio recuperado. As estruturas de formantes
-variando no tempo confirmam a recupera\c{c}\~ao da voz.}
+\includegraphics[width=0.8\linewidth]{figs/f5_final_freq.png}
+\caption{\'Audio recuperado na frequ\^encia: a voz concentra-se nas baixas
+frequ\^encias e o tom interferente em 766~Hz foi praticamente eliminado.}
 \end{figure}
 
 O c\'odigo completo do item 5 \'e apresentado a seguir.
@@ -326,8 +453,8 @@ demodulada e filtrada obtida foi:
 A pr\'atica consolidou os conceitos fundamentais dos filtros IIR. A
 implementa\c{c}\~ao dos filtros de p\'olo simples permitiu observar diretamente a
 rela\c{c}\~ao entre a constante $r$, a frequ\^encia de corte e o decaimento da
-resposta ao impulso, bem como o comportamento suave das curvas de ganho,
-atenua\c{c}\~ao e fase de um sistema de primeira ordem. Os filtros de banda
+resposta ao impulso, bem como o comportamento suave das curvas de ganho e fase
+de um sistema de primeira ordem. Os filtros de banda
 estreita, de segunda ordem, evidenciaram o papel do par\^ametro $BW$ no
 posicionamento dos p\'olos e na sele\c{c}\~ao (ou rejei\c{c}\~ao) de uma faixa
 estreita do espectro.
