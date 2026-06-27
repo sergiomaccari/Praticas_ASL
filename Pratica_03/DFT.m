@@ -1,12 +1,11 @@
-function [Y] = DFT(XX)
-    NX = length(XX);
-    REX(floor(NX/2) + 1) = 0;
-    IMX(floor(NX/2) + 1) = 0;
-    for K = 1:(floor(NX/2) + 1)
-        for I = 1:NX
-            REX(K) = REX(K) + XX(I) * cos(2 * pi * (K-1) * (I-1) / NX);
-            IMX(K) = IMX(K) - XX(I) * sin(2 * pi * (K-1) * (I-1) / NX);
+function [y] = DFT(x) % by cesar  janeczko em 1sem2025
+    nx=length(x);
+    y(floor(nx/2)+1)=0;
+    i=sqrt(-1);
+    for k=1:(nx/2)+1% frequencia k
+        for j=1:nx
+            y(k)=y(k)+ x(j)*exp(-i*2*pi*(k-1)*(j-1)/nx);
+            % a exponencial contem seno e cosseno Euller
         end
-        Y = REX + sqrt(-1) * IMX;
     end
 end
