@@ -31,8 +31,11 @@ figure('Name','Sinal demodulado - FFT');   plot(abs(fft(demodulado)));
     title('FFT do sinal demodulado');     xlabel('bin');
 
 %% (c) Passa-baixas WindowSinc: remove o ruido branco de alta frequencia
-fc = 0.075;            % ~3 kHz (borda observada onde comeca o ruido branco)
-M  = 100;
+% O ruido e de ALTA frequencia: desprezivel abaixo de ~2 kHz e sobe ate o
+% piso branco em ~3.5 kHz. A voz recuperavel esta abaixo de ~1.5 kHz. Logo o
+% corte fica em ~2 kHz (0.05) para remover o "xiado" sem perder a fala.
+fc = 0.05;             % ~2 kHz
+M  = 400;              % muitos coef. => transicao ABRUPTA (corte bem definido)
 h  = FWSPB(M, fc);
 lp = conv(demodulado, h);
 lp = lp(M/2+1 : M/2+N);                    % alinha (remove atraso de grupo) e mantem N amostras
@@ -41,11 +44,15 @@ figure('Name','Apos passa-baixas - tempo'); plot(lp);
 figure('Name','Apos passa-baixas - FFT');   plot(abs(fft(lp)));
     title('FFT apos passa-baixas');         xlabel('bin');
 
-%% (d) Rejeita-banda estreito no tom interferente (~766 Hz), em cascata 3x
-fnotch = 766/Fs;       % frequencia normalizada do tom (~0.01915)
-bw     = 0.0008;       % banda muito estreita
+%% (d) Rejeita-banda na FAIXA interferente (~758-778 Hz), em cascata 3x
+% A interferencia nao e um tom puro: ocupa uma faixa de ~20 Hz centrada em
+% 768 Hz. Um notch estreito (bw pequeno) fura so o meio e deixa os ombros
+% (o residuo reaparece em ~778 Hz). Por isso o notch precisa ser largo o
+% suficiente para cobrir toda a faixa.
+fnotch = 768/Fs;       % centro da faixa interferente (~0.0192)
+bw     = 0.006;        % largura suficiente p/ cobrir os ~20 Hz da faixa
 rb = lp;
-for k = 1:3            % cascata: soma as atenuacoes de cada estagio
+for k = 1:3            % cascata: soma as atenuacoes de cada estagio (~-63 dB)
     rb = FiltroRejeitaBanda(bw, fnotch, rb);
 end
 figure('Name','Audio recuperado - tempo'); plot(rb);

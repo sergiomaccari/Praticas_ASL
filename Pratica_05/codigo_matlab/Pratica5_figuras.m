@@ -22,8 +22,10 @@ FC_FPB = 0.10;  FC_FPA = 0.10;           % item 1/2 - polo simples
 fs12   = 1000;  f_low = 30;  f_high = 350;
 FC_BANDA = 0.25; BW_BANDA = 0.008;       % item 3/4 - banda estreita
 fs34   = 1000;  tones4 = [40 120 250 380 470];
-FC_LP5 = 0.075; M_WS5 = 100;             % item 5 - som
-F_NOTCH = 0.01915; BW_NOTCH = 0.0008; N_CASC = 3;
+FC_LP5 = 0.05; M_WS5 = 400;              % item 5 - som: corte ~2 kHz (ruido e HF, sobe acima de 2 kHz), M grande => corte abrupto
+% Interferencia = FAIXA de ~20 Hz (758-778 Hz, centro 768). Notch estreito
+% fura so o meio e deixa o residuo em ~778 Hz; por isso bw largo o bastante.
+F_NOTCH = 0.0192; BW_NOTCH = 0.006; N_CASC = 3;
 M = 100;  imp = zeros(1, M); imp(1) = 1; % impulso (1 0 0 ... 100 pontos)
 
 % =======================================================================
@@ -89,7 +91,7 @@ lp = lp_full(M_WS5/2 + 1 : M_WS5/2 + N);   % alinhamento (mesmo N)
 fig_tempo(lp, 'Sinal apos passa-baixas WindowSinc no tempo', fullfile(OUT,'f5_lp_tempo.png'));
 fig_freq (lp, 'FFT do sinal apos passa-baixas', fullfile(OUT,'f5_lp_freq.png'));
 
-% (d) rejeita-banda estreito no tom (~766 Hz), em cascata 3x
+% (d) rejeita-banda na FAIXA interferente (~758-778 Hz, centro 768), cascata 3x
 rb = lp;
 for kk = 1:N_CASC; rb = FiltroRejeitaBanda(BW_NOTCH, F_NOTCH, rb); end
 fig_tempo(rb, 'Audio recuperado (apos rejeita-banda x3) no tempo', fullfile(OUT,'f5_final_tempo.png'));

@@ -75,45 +75,49 @@ subplot(3,2,6); plot(abs(fft(y2_fcf))); title('|FFT| FCF'); xlim([0 length(y2_fc
 %% =========================================================
 %% 5) Processamento de Áudio - Demodulação e Filtragem
 %% =========================================================
-if isfile('Sinal Ruido Modulado1s2026.mat')
-    load('Sinal Ruido Modulado1s2026.mat');
+if isfile('SinalRuidoModulado1s2026.mat')
+    load('SinalRuidoModulado1s2026.mat');
     sinal = sinalModulado(:); % Garante vetor coluna
     Fs = 40000;
-    
+
     n_som = (0:length(sinal)-1)';
-    
+
     % PASSO A - DEMODULAÇÃO
     % A portadora usa a máxima frequência digital (Nyquist) que é Fs/2.
     % Em frequência normalizada: 0.5. A equação é: cos(2*pi*0.5*n) = cos(pi*n)
     portadora = cos(pi * n_som);
     sinal_demod = sinal .* portadora;
-    
+
     % PASSO B - FILTRO PASSA-BAIXAS (WindowSinc)
-    % Remove o espelho espectral da demodulação. Voz tipicamente < 4kHz.
-    % Freq corte normalizada: 4000 / 40000 = 0.1
-    h_sinc = FWSPB(100, 0.1);
+    % O ruído é de ALTA frequência: desprezível abaixo de ~2 kHz e sobe até o
+    % piso branco em ~3.5 kHz. A voz recuperável está abaixo de ~1.5 kHz. Por
+    % isso o corte fica em ~2 kHz (0.05) - remove o "xiado" sem perder a fala.
+    % M grande (400) => transição abrupta (corte bem definido).
+    h_sinc = FWSPB(400, 0.05);
     sinal_base = conv(sinal_demod, h_sinc, 'same');
-    
+
     figure(7); set(gcf, 'Name', '5 - FFT do Áudio Demodulado');
-    plot(abs(fft(sinal_base))); 
+    plot(abs(fft(sinal_base)));
     title('Espectro Base - Procure os picos de ruído aqui!');
-    
-    % PASSO C - FILTRO CORTA FAIXA ESTREITA
-    % O PDF adverte: "pode ser preciso filtrar mais de uma vez!"
-    % Preencha o vetor abaixo com as frequências normalizadas (ciclos/amostra) 
-    % onde os picos indesejados aparecerem no gráfico 7.
-    f_ruidos = [0.15, 0.20]; % SUBSTITUA PELAS FREQUÊNCIAS REAIS QUE ENCONTRAR
-    bw_ruido = 0.005;
-    
+
+    % PASSO C - FILTRO CORTA FAIXA
+    % A interferência (o "assobio/sirene") NÃO é um tom puro: ocupa uma faixa
+    % de ~20 Hz entre 758 e 778 Hz (centro 768 Hz). Por isso o notch precisa
+    % ser LARGO o bastante p/ cobrir a faixa (bw pequeno fura só o meio e o
+    % resíduo reaparece em ~778 Hz), e aplicado em cascata p/ atenuar bem.
+    f_ruidos = 768/Fs;   % centro da faixa interferente (~0.0192)
+    bw_ruido = 0.006;    % largura suficiente p/ cobrir os ~20 Hz da faixa
+
     sinal_limpo = sinal_base;
-    for f_r = f_ruidos
-        % Filtra em cascata limpando as componentes indesejadas
-        sinal_limpo = FiltroRejeitaBanda(bw_ruido, f_r, sinal_limpo);
+    for passo = 1:3      % cascata 3x (~-63 dB na faixa do ruído)
+        for f_r = f_ruidos
+            sinal_limpo = FiltroRejeitaBanda(bw_ruido, f_r, sinal_limpo);
+        end
     end
-    
+
     % Normalização para escutar
     sinal_limpo = sinal_limpo / max(abs(sinal_limpo));
-    
+
     disp('Reproduzindo áudio filtrado...');
     sound(sinal_limpo, Fs);
     % audiowrite('sinal_filtrado.wav', sinal_limpo, Fs);

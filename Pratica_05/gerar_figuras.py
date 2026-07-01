@@ -23,10 +23,10 @@ BW_BANDA = 0.008
 fs34   = 1000.0
 tones4 = [40, 120, 250, 380, 470]
 # Item 5 (som)
-FC_LP5  = 0.075
-M_WS5   = 100
-F_NOTCH = 0.01915
-BW_NOTCH= 0.0008
+FC_LP5  = 0.05          # ~2 kHz: o ruido e de alta freq (sobe acima de ~2 kHz); a voz esta abaixo de ~1.5 kHz
+M_WS5   = 400           # muitos coef. => transicao abrupta (corte bem definido)
+F_NOTCH = 0.0192        # 768 Hz - centro da FAIXA interferente (~758-778 Hz)
+BW_NOTCH= 0.006         # largura p/ cobrir os ~20 Hz da faixa (nao so o centro)
 N_CASC  = 3
 
 def save(fig, name):
@@ -106,7 +106,7 @@ fig_tf(demod, "Sinal demodulado  x cos(pi n)", "f5_demodulado.png")
 h_ws = d.FWSPB(M_WS5, FC_LP5)
 lp = np.convolve(demod, h_ws)[M_WS5//2 : M_WS5//2 + N]
 fig_tf(lp, "Após passa-baixas WindowSinc", "f5_passabaixas.png")
-# (d) rejeita-banda x3 (tom em ~766 Hz)
+# (d) rejeita-banda x3 (faixa interferente ~758-778 Hz, centro 768 Hz)
 rb = lp.copy()
 for _ in range(N_CASC):
     rb = d.FiltroRejeitaBanda(BW_NOTCH, F_NOTCH, rb)
@@ -117,7 +117,7 @@ f = np.arange(N)*Fs_audio/N; lim = int(2000*N/Fs_audio)
 fig, ax = plt.subplots(1, 1, figsize=(7, 3))
 ax.plot(f[:lim], np.abs(np.fft.fft(lp))[:lim], label="após passa-baixas")
 ax.plot(f[:lim], np.abs(np.fft.fft(rb))[:lim], color=d.MATLAB_RED, label="após rejeita-banda x3")
-ax.set_title("Tom interferente em ~766 Hz - antes e depois do notch")
+ax.set_title("Faixa interferente ~758-778 Hz - antes e depois do notch")
 ax.set_xlabel("Hz"); ax.legend(fontsize=8); d.style_ax(ax)
 save(fig, "f5_notch.png")
 
